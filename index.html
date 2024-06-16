@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Link</title>
+    <link href="https://fonts.googleapis.com/css2?family=Popings:wght@100&display=swap" rel="stylesheet">
+
+
+<style>
+    body, .card, .glowing-name, .link-box a, .overlay, .invisible-button {
+        font-family: 'Popings', sans-serif;
+        font-weight: 100;
+    }
+
+    body {
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: white;
+        overflow: hidden;
+        user-select: none;
+        cursor: none;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 24px;
+    }
+
+    .card {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(136, 136, 136, 0.37);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        width: 80%;
+        max-width: 600px;
+        padding: 20px;
+        box-sizing: border-box;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+        outline: 3px solid rgba(255, 255, 255, 0.7);
+        transition: outline 0.3s ease-in-out;
+    }
+
+    .profile-picture:hover {
+        outline-color: rgba(255, 255, 255, 1);
+    }
+
+    .glowing-name {
+        font-size: 24px;
+        font-weight: 100;
+        color: white;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        margin-top: 5px;
+    }
+
+    .description {
+        font-size: 16px;
+        color: white;
+        margin-top: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        border-right: 3px solid white;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        animation: typewriter 4s steps(30) 1s forwards;
+    }
+    @keyframes typewriter {
+        from { width: 0 }
+        to { width: 100% }
+    }
+
+    .links {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .link-box {
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px 0 rgba(15, 15, 15, 0.37);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        width: 100px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+
+    .link-box:hover {
+        transform: scale(1.1);
+    }
+
+    .link-box a {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        user-select: none;
+    }
+
+    canvas.snow-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .music-controls {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+
+    .overlay-clicked .card {
+        opacity: 1;
+    }
+
+    .custom-cursor {
+        position: absolute;
+        z-index: 9999;
+        pointer-events: none;
+        width: 80px;
+        height: 80px;
+    }
+</style>
+
+</head>
+<body>
+    <canvas class="snow-canvas"></canvas>
+
+
+
+<div class="overlay" onclick="startMusic()">
+    Click to Enter
+</div>
+
+<div class="card" id="content">
+    <img id="profile-picture" class="profile-picture" src="https://cdn.discordapp.com/avatars/1177497949601812512/a_894349e5a686574ec5f5c85c1f977d39.gif?size=1024" alt="Profile Picture" draggable="false">
+    <div class="glowing-name">
+        os.gg
+    </div>
+    <div class="description">
+    </div>
+    <div class="links">
+        <div class="link-box">
+            <a href="https://www.instagram.com/yahooings/">Instagram</a>
+        </div>
+        <div class="link-box">
+            <a href="https://www.tiktok.com/@yahooings">Tiktok</a>
+        </div>
+        <div class="link-box">
+            <a href="https://t.me/yahooings">Telegram</a>
+        </div>
+        <div class="link-box">
+            <a href="https://e-z.bio/thc">Bio</a>
+        </div>
+    </div>
+</div>
+
+<audio id="bg-music" loop>
+    <source src="background_music.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<img src="https://i.pinimg.com/originals/f9/25/e1/f925e13343ffc8726316f519b3619424.png" class="custom-cursor">
+
+<script src="snow.js"></script>
+<script>
+    function typeWriter(text, i, fnCallback) {
+        if (i < (text.length)) {
+            document.querySelector(".description").innerHTML = text.substring(0, i+1) + '<span aria-hidden="true"></span>';
+
+            setTimeout(function() {
+                typeWriter(text, i + 1, fnCallback)
+            }, 100);
+        }
+        else if (typeof fnCallback == 'function') {
+            setTimeout(fnCallback, 700);
+        }
+    }
+
+    function StartTextAnimation() {
+        var text = "i have a huge demon in my pants. DTF? hmu on discord os.gg";
+        typeWriter(text, 0, function(){
+        });
+    }
+
+    function startMusic() {
+        var overlay = document.querySelector('.overlay');
+        overlay.style.display = 'none';
+        var content = document.getElementById('content');
+        content.style.opacity = '1';
+        var audio = document.getElementById('bg-music');
+        audio.play();
+        StartTextAnimation();
+    }
+
+    document.addEventListener('mousemove', function(e) {
+        var cursor = document.querySelector('.custom-cursor');
+        cursor.style.left = e.pageX + 'px';
+        cursor.style.top = e.pageY + 'px';
+    });
+</script>
+
+</body>
+</html>
